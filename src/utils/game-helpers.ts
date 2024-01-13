@@ -1,4 +1,4 @@
-import { GAME_STATUSES, GameCard, GameSize } from 'models/game';
+import { GameSize } from 'models/game.model';
 
 export function getClassNameBySize(size: GameSize): string {
   switch (size) {
@@ -13,19 +13,10 @@ export function getClassNameBySize(size: GameSize): string {
   }
 }
 
-// Remove after real data will recive
-export function generateCards(): GameCard[] {
-  // 3 x 2
-  let count = 6;
-  const res: GameCard[] = [];
-  while (count) {
-    res.push({
-      id: `${count}`,
-      word: `word${count}`,
-      word_id: `${count}`,
-      status: GAME_STATUSES.closed
-    });
-    count--;
+export function shuffleArray<T>(array: T[]): T[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
-  return res;
+  return array;
 }

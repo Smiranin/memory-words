@@ -1,4 +1,4 @@
-import { GAME_STATUSES, GameCard } from 'models/game';
+import { GameCard, CARD_STATUSES } from 'models/game.model';
 import styles from './card.module.css';
 import { joinClasses } from 'utils/styles-healper';
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ export default function Card(props: {
   const [cssClasses, setCssClasses] = useState('');
 
   function handleClick(): void {
-    if (card.status !== GAME_STATUSES.closed) return;
+    if (card.status !== CARD_STATUSES.closed) return;
     // debugger;
     onOpen(card);
   }
@@ -25,10 +25,9 @@ export default function Card(props: {
     //   timeoutId = setTimeout(() => onTimeoutCb(card), CARD_TIMEOUT);
     // }
     const newState = joinClasses(
-      { [styles.open]: card.status === GAME_STATUSES.opened },
+      { [styles.open]: card.status === CARD_STATUSES.opened },
       styles.card
     );
-    debugger;
     setCssClasses(newState);
     return () => {
       clearTimeout && clearTimeout(timeoutId);

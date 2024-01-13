@@ -1,14 +1,25 @@
+import { nanoid } from '@reduxjs/toolkit';
+import { AppUser } from 'models/user.model';
 import { Link, Outlet } from 'react-router-dom';
-import { createGame } from 'services/firebase/game';
+import { createGame } from 'services/game.service';
+
+const fakeUser: AppUser = {
+  id: nanoid(),
+  firstName: 'Bugs',
+  lastName: 'Bunny',
+  fullName: 'Bugs Bunny'
+};
 
 export default function Layout() {
   async function startGame() {
     try {
-      const response = await createGame();
-      // if (!response.ok) {
-      //   throw new Error('Network response was not ok.');
-      // }
-      // const result = await response.json();
+      const newGame = await createGame({
+        user: fakeUser,
+        size: 'sm',
+        lang: ['en', 'ru'],
+        type: 'single'
+      });
+      debugger;
     } catch (error) {
       console.error('Error fetching data:', error);
     }

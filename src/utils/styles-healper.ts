@@ -4,6 +4,5 @@ export function joinClasses(styles: { [key: string]: boolean }, ...existed: stri
     .map(([key]) => key);
 
   const res = existed.join(' ') + ' ' + classes.join(' ');
-  debugger;
   return res;
 }

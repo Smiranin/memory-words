@@ -1,4 +1,4 @@
-import { GAME_STATUSES, GameCard, GameSize } from 'models/game';
+import { CARD_STATUSES, GameCard, GameSize } from 'models/game.model';
 import Card from './Card';
 import { getClassNameBySize } from 'utils/game-helpers';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ export default function CardsZone(props: { cards: GameCard[]; size: GameSize }) 
 
   useEffect(() => {
     cards.forEach((card) => {
-      if (card.status === GAME_STATUSES.opened) {
+      if (card.status === CARD_STATUSES.opened) {
         activeCards.push(card);
       }
     });
@@ -23,25 +23,25 @@ export default function CardsZone(props: { cards: GameCard[]; size: GameSize }) 
     const nextState = produce(cards, (draftState) => {
       if (activeCards.length === 0) {
         draftState.forEach((item) => {
-          if (item.id === card.id) {
-            item.status = GAME_STATUSES.opened;
+          if (item.word === card.word) {
+            item.status = CARD_STATUSES.opened;
           }
         });
       } else if (activeCards.length === 1) {
         const currentOpen = activeCards[0];
         const nextStatus =
-          currentOpen.word_id === card.word_id ? GAME_STATUSES.won : GAME_STATUSES.opened;
+          currentOpen.wordId === card.wordId ? CARD_STATUSES.completed : CARD_STATUSES.opened;
         draftState.forEach((item) => {
-          if (item.id === card.id || item.id === currentOpen.id) {
+          if (item.word === card.word || item.word === currentOpen.word) {
             item.status = nextStatus;
           }
         });
         // If 2 we close opened two cards and open new one
       } else {
         draftState.forEach((item) => {
-          item.status = item.status === GAME_STATUSES.opened ? GAME_STATUSES.closed : item.status;
-          if (item.id === card.id) {
-            item.status = GAME_STATUSES.opened;
+          item.status = item.status === CARD_STATUSES.opened ? CARD_STATUSES.closed : item.status;
+          if (item.word === card.word) {
+            item.status = CARD_STATUSES.opened;
           }
         });
       }
@@ -54,8 +54,8 @@ export default function CardsZone(props: { cards: GameCard[]; size: GameSize }) 
   function timeoutHandle(card: GameCard): void {
     const nextState = produce(cards, (draftState) => {
       draftState.forEach((item) => {
-        if (item.id === card.id) {
-          card.status = GAME_STATUSES.closed;
+        if (item.word === card.word) {
+          card.status = CARD_STATUSES.closed;
         }
       });
     });
@@ -65,7 +65,7 @@ export default function CardsZone(props: { cards: GameCard[]; size: GameSize }) 
   return (
     <div className={cssClasses}>
       {cards.map((card) => (
-        <Card key={card.id} card={card} onOpen={openCardHandle} onTimeoutCb={timeoutHandle} />
+        <Card key={card.word} card={card} onOpen={openCardHandle} onTimeoutCb={timeoutHandle} />
       ))}
     </div>
   );

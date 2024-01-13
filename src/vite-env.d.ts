@@ -1,7 +1,5 @@
 /// <reference types="vite/client" />
 
-// type Vitest = import('vitest');
-
 interface ImportMetaEnv {
   readonly VITE_FB_API_KEY: string;
   readonly VITE_FB_PROJECT_ID: string;
