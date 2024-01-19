@@ -1,6 +1,6 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { AppUser } from 'models/user.model';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { createGame } from 'services/game.service';
 
 const fakeUser: AppUser = {
@@ -11,6 +11,8 @@ const fakeUser: AppUser = {
 };
 
 export default function Layout() {
+  const navigate = useNavigate();
+
   async function startGame() {
     try {
       const newGame = await createGame({
@@ -19,7 +21,7 @@ export default function Layout() {
         lang: ['en', 'ru'],
         type: 'single'
       });
-      debugger;
+      navigate(`games/${newGame.id}`);
     } catch (error) {
       console.error('Error fetching data:', error);
     }

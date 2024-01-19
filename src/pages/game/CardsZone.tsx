@@ -3,11 +3,14 @@ import Card from './Card';
 import { getClassNameBySize } from 'utils/game-helpers';
 import { useEffect, useState } from 'react';
 import { produce } from 'immer';
+import { useAppSelector } from 'store/hooks';
 
-export default function CardsZone(props: { cards: GameCard[]; size: GameSize }) {
-  const [cards, setCards] = useState<GameCard[]>(props.cards);
+export default function CardsZone() {
+  const game = useAppSelector((state) => state.game);
 
-  const colsClassName = getClassNameBySize(props.size);
+  const [cards, setCards] = useState<GameCard[]>(game.cards);
+  const colsClassName = getClassNameBySize(game.size);
+
   const cssClasses = `grid ${colsClassName} gap-4`;
   const activeCards: GameCard[] = [];
 
@@ -64,7 +67,7 @@ export default function CardsZone(props: { cards: GameCard[]; size: GameSize }) 
 
   return (
     <div className={cssClasses}>
-      {cards.map((card) => (
+      {game.cards.map((card) => (
         <Card key={card.word} card={card} onOpen={openCardHandle} onTimeoutCb={timeoutHandle} />
       ))}
     </div>

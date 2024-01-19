@@ -1,18 +1,33 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, onValue, ref, update } from 'firebase/database';
+import { DatabaseReference, getDatabase, off, onValue, ref, update } from 'firebase/database';
 import { firebaseConfig } from './config';
 import { Word } from 'models/words.model';
 import { Game } from 'models/game.model';
 
 initializeApp(firebaseConfig);
-const database = getDatabase();
-const wordsRef = ref(database, '/words');
+const db = getDatabase();
+const wordsRef = ref(db, '/words');
+let activeGame: DatabaseReference | null = null;
 
 export async function addNewGame(game: Game): Promise<void> {
   const updates: Record<string, Game> = {};
   updates[`/games/${game.id}`] = game;
+  return update(ref(db), updates);
+}
 
-  return update(ref(database), updates);
+export function initGame(id: string, cb: Function): { status: 'ok' | 'error'; msg?: string } {
+  activeGame = ref(db, `games/${id}`);
+  if (!activeGame) {
+    return { status: 'error', msg: 'Game not found' };
+  }
+  onValue(activeGame, (snapshot) => cb(snapshot.val()));
+  return { status: 'ok' };
+}
+
+export function unsubscribeFromActiveGame(): void {
+  if (activeGame) {
+    off(activeGame);
+  }
 }
 
 export async function getWords(): Promise<Word[]> {
