@@ -1,25 +1,21 @@
 import { useParams } from 'react-router-dom';
 import CardsZone from './CardsZone';
-import { useAppSelector, useAppDispatch } from 'store/hooks';
+import { useAppDispatch } from 'store/hooks';
 import { useEffect } from 'react';
-import { unsubscribeFromActiveGame, initGame } from 'services/firebase/firebase-api.service';
-import { getGame, reasetGame } from 'store/gameSlice';
-import { Game } from 'models/game.model';
+import { unsubscribeFromActiveGame } from 'services/firebase/firebase-api.service';
+import { resetGame, startGame } from 'store/gameSlice';
 
 export default function GamePage() {
   const dispatch = useAppDispatch();
   const { id } = useParams<'id'>();
   useEffect(() => {
     if (!id) return;
-    const res = initGame(id, (game: Game) => {
-      dispatch(getGame(game));
-    });
-    if (res.status === 'error') console.log(res.msg);
+    dispatch(startGame(id));
     return () => {
       unsubscribeFromActiveGame();
-      dispatch(reasetGame());
+      dispatch(resetGame());
     };
-  }, []);
+  }, [id]);
 
   return (
     <div className="container">

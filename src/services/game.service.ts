@@ -14,6 +14,7 @@ export async function createGame(params: GameSettings & { user: AppUser }): Prom
     status: 'pending',
     players: [createGameUser(user)],
     cards: cards,
+    activeCards: [],
     lang,
     size,
     type

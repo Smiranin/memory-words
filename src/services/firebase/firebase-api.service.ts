@@ -15,7 +15,13 @@ export async function addNewGame(game: Game): Promise<void> {
   return update(ref(db), updates);
 }
 
-export function initGame(id: string, cb: Function): { status: 'ok' | 'error'; msg?: string } {
+export function subscribeToGame(
+  id: string,
+  cb: Function
+): { status: 'ok' | 'error'; msg?: string } {
+  if (activeGame) {
+    unsubscribeFromActiveGame();
+  }
   activeGame = ref(db, `games/${id}`);
   if (!activeGame) {
     return { status: 'error', msg: 'Game not found' };
@@ -24,9 +30,16 @@ export function initGame(id: string, cb: Function): { status: 'ok' | 'error'; ms
   return { status: 'ok' };
 }
 
+export function updaGame(game: Game): void {
+  if (activeGame) {
+    update(activeGame, game);
+  }
+}
+
 export function unsubscribeFromActiveGame(): void {
   if (activeGame) {
     off(activeGame);
+    activeGame = null;
   }
 }
 

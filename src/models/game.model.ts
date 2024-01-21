@@ -3,6 +3,7 @@ export interface Game extends GameSettings {
   status: GameStatus;
   players: GameUser[];
   cards: GameCard[];
+  activeCards: GameCard[];
 }
 
 export interface GameSettings {
