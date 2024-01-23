@@ -1,7 +1,7 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CARD_STATUSES, Game, GameCard } from 'models/game.model';
 import { AppDispatch, RootState } from './store';
-import { subscribeToGame, updaGame } from 'services/firebase/firebase-api.service';
+import { subscribeToGame, updateActiveGame } from 'services/firebase/firebase-api.service';
 
 const initialState: Game = {
   id: '',
@@ -24,7 +24,7 @@ const gameSlice = createSlice({
     resetGame() {
       return { ...initialState };
     },
-    updateCards(state, action: PayloadAction<GameCard>) {
+    cardOpened(state, action: PayloadAction<GameCard>) {
       const targetCard = action.payload;
       let activeCards = state.activeCards || [];
       if (activeCards.length === 0) {
@@ -55,7 +55,7 @@ const gameSlice = createSlice({
         });
       }
     },
-    closeCard(state, action: PayloadAction<GameCard>) {
+    cardClosed(state, action: PayloadAction<GameCard>) {
       const targetCard = action.payload;
       state.cards.forEach((item) => {
         if (item.word === targetCard.word) {
@@ -63,7 +63,6 @@ const gameSlice = createSlice({
         }
       });
       state.activeCards = state.activeCards.filter((card) => card.word !== targetCard.word);
-      updaGame(current(state));
     }
   },
   extraReducers(builder) {
@@ -78,25 +77,28 @@ const gameSlice = createSlice({
 });
 
 export function startGame(id: string) {
-  return function test(dispatch: AppDispatch) {
+  return function startGameThunk(dispatch: AppDispatch) {
     subscribeToGame(id, (game: Game) => {
-      console.log(
-        '%c Debug:',
-        'background: #0E1926; color: #8EFF1E; padding: 8px 12px; font-size: 14px;',
-        'Init Game Page'
-      );
       dispatch(getGame(game));
     });
   };
 }
 
-export function updateCardsV2(card: GameCard) {
-  return function initGameThunk(dispatch: AppDispatch, test: any) {
-    dispatch(updateCards(card));
+export function openCard(card: GameCard) {
+  return function updateCardOnOpenThunk(dispatch: AppDispatch, test: any) {
+    dispatch(cardOpened(card));
     let state = test() as RootState;
-    updaGame(state.game);
+    updateActiveGame(state.game);
   };
 }
 
-export const { getGame, resetGame, updateCards, closeCard } = gameSlice.actions;
+export function closeCard(card: GameCard) {
+  return function updateCardOnCloseThunk(dispatch: AppDispatch, test: any) {
+    dispatch(cardClosed(card));
+    let state = test() as RootState;
+    updateActiveGame(state.game);
+  };
+}
+
+export const { getGame, resetGame, cardOpened, cardClosed } = gameSlice.actions;
 export default gameSlice.reducer;

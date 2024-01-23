@@ -30,7 +30,7 @@ export function subscribeToGame(
   return { status: 'ok' };
 }
 
-export function updaGame(game: Game): void {
+export function updateActiveGame(game: Game): void {
   if (activeGame) {
     update(activeGame, game);
   }
