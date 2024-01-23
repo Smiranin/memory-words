@@ -37,7 +37,7 @@ export default function Layout() {
             </Link>
           </li>
           <li className="mr-6">
-            <button className="text-blue-500 hover:text-blue-800" onClick={startGame}>
+            <button className="btn bg-mandy-500 hover:bg-mandy-600" onClick={startGame}>
               Start new game
             </button>
           </li>
