@@ -3,7 +3,7 @@ import styles from './card.module.css';
 import { joinClasses } from 'utils/styles-healper';
 import { useEffect, useState } from 'react';
 
-const CARD_TIMEOUT = 5000;
+const CARD_TIMEOUT = 2000;
 
 export default function Card(props: {
   card: GameCard;
@@ -15,22 +15,21 @@ export default function Card(props: {
 
   function handleClick(): void {
     if (card.status !== CARD_STATUSES.closed) return;
-    // debugger;
     onOpen(card);
   }
 
   useEffect(() => {
     let timeoutId: number;
-    // if (card.status === GAME_STATUSES.opened) {
-    //   timeoutId = setTimeout(() => onTimeoutCb(card), CARD_TIMEOUT);
-    // }
+    if (card.status === CARD_STATUSES.opened) {
+      timeoutId = setTimeout(() => onTimeoutCb(card), CARD_TIMEOUT);
+    }
     const newState = joinClasses(
       { [styles.open]: card.status === CARD_STATUSES.opened },
       styles.card
     );
     setCssClasses(newState);
     return () => {
-      clearTimeout && clearTimeout(timeoutId);
+      timeoutId && clearTimeout(timeoutId);
     };
   }, [card.status]);
 

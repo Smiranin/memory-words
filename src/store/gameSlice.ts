@@ -51,9 +51,11 @@ const gameSlice = createSlice({
           item.status = item.status === CARD_STATUSES.opened ? CARD_STATUSES.closed : item.status;
           if (item.word === targetCard.word) {
             item.status = CARD_STATUSES.opened;
+            activeCards.push(item);
           }
         });
       }
+      state.activeCards = activeCards;
     },
     cardClosed(state, action: PayloadAction<GameCard>) {
       const targetCard = action.payload;
