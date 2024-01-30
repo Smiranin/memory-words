@@ -10,7 +10,7 @@ export default function CardsZone() {
 
   const colsClassName = getClassNameBySize(game.size);
 
-  const cssClasses = `grid ${colsClassName} gap-4`;
+  const cssClasses = `grid ${colsClassName} gap-4 auto-rows-fr`;
 
   function openCardHandle(card: GameCard): void {
     dispatch(openCard(card));
@@ -21,7 +21,7 @@ export default function CardsZone() {
   }
 
   return (
-    <div className={cssClasses}>
+    <div className="m-2 grid gap-4 grid-rows-[repeat(3,_1fr)] grid-flow-col h-[600px]">
       {game.cards.map((card) => (
         <Card key={card.word} card={card} onOpen={openCardHandle} onTimeoutCb={timeoutHandle} />
       ))}

@@ -29,7 +29,7 @@ export default function Layout() {
 
   return (
     <div>
-      <nav>
+      <nav className="container m-auto">
         <ul className="flex">
           <li className="mr-6">
             <Link className="text-blue-500 hover:text-blue-800" to="/">
@@ -44,9 +44,9 @@ export default function Layout() {
         </ul>
       </nav>
 
-      <hr />
-
-      <Outlet />
+      <div className="h-svh overflow-hidden">
+        <Outlet />
+      </div>
     </div>
   );
 }

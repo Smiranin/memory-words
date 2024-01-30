@@ -1,7 +1,7 @@
 .card {
   position: relative;
   perspective: 1000px;
-  aspect-ratio: 1 / 1;
+  /* aspect-ratio: 1 / 1; */
   user-select: none;
 }
 
@@ -16,9 +16,14 @@
   transform-style: preserve-3d;
 }
 
-.card.open .content {
+.card.open .content,
+.card.won .content {
   transform: rotateY(180deg);
   transition: transform 0.5s;
+}
+
+.card.won {
+  opacity: 0.3;
 }
 
 .front,
@@ -26,7 +31,6 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  line-height: 300px;
   background: #03446a;
   text-align: center;
   font-size: 60px;
@@ -35,6 +39,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  padding: 20px;
+  border: 2px solid #03446a;
+  border-radius: 6px;
 }
 
 .front {
