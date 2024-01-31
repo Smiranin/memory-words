@@ -1,7 +1,7 @@
 .card {
   position: relative;
   perspective: 1000px;
-  /* aspect-ratio: 1 / 1; */
+  /* aspect-ratio: 1; */
   user-select: none;
 }
 
@@ -22,8 +22,9 @@
   transition: transform 0.5s;
 }
 
-.card.won {
+.card.won .front {
   opacity: 0.3;
+  cursor: default;
 }
 
 .front,
@@ -43,6 +44,7 @@
   padding: 20px;
   border: 2px solid #03446a;
   border-radius: 6px;
+  line-height: 1;
 }
 
 .front {

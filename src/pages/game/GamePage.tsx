@@ -18,8 +18,7 @@ export default function GamePage() {
   }, [id]);
 
   return (
-    <div className="container m-auto h-full">
-      {/* <h1>Game: #{id}</h1> */}
+    <div className="container m-auto h-full p-2 ">
       <CardsZone />
     </div>
   );

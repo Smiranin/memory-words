@@ -66,15 +66,6 @@ const gameSlice = createSlice({
       });
       state.activeCards = state.activeCards.filter((card) => card.word !== targetCard.word);
     }
-  },
-  extraReducers(builder) {
-    builder.addCase('game/start', (state, action) => {
-      console.log(
-        '%c Debug:',
-        'background: #0E1926; color: #8EFF1E; padding: 8px 12px; font-size: 14px;',
-        action
-      );
-    });
   }
 });
 

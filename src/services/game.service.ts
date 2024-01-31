@@ -60,7 +60,7 @@ function createGameUser(user: AppUser): GameUser {
 function adjustArrayBySize(arr: Word[], size: GameSize): Word[] {
   switch (size) {
     case 'sm':
-      return arr.slice(0, 6);
+      return arr.slice(0, 3);
     case 'md':
       return arr.slice(0, 8);
     case 'lg':
