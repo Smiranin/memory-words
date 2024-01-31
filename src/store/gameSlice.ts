@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CARD_STATUSES, Game, GameCard } from 'models/game.model';
+import { Game, GameCard } from 'models/game.model';
 import { AppDispatch, RootState } from './store';
 import { subscribeToGame, updateActiveGame } from 'services/firebase/firebase-api.service';
+import GameLogic from 'services/game-logic.service';
 
 const initialState: Game = {
   id: '',
@@ -11,7 +12,8 @@ const initialState: Game = {
   type: 'single',
   size: 'sm',
   lang: ['ru', 'en'],
-  activeCards: []
+  activeCards: [],
+  wordsLeft: Infinity
 };
 
 const gameSlice = createSlice({
@@ -25,46 +27,10 @@ const gameSlice = createSlice({
       return { ...initialState };
     },
     cardOpened(state, action: PayloadAction<GameCard>) {
-      const targetCard = action.payload;
-      let activeCards = state.activeCards || [];
-      if (activeCards.length === 0) {
-        state.cards.forEach((item) => {
-          if (item.word === targetCard.word) {
-            item.status = CARD_STATUSES.opened;
-            activeCards.push(item);
-          }
-        });
-      } else if (activeCards.length === 1) {
-        const currentOpen = activeCards[0];
-        const nextStatus =
-          currentOpen.wordId === targetCard.wordId ? CARD_STATUSES.completed : CARD_STATUSES.opened;
-        state.cards.forEach((item) => {
-          if (item.word === targetCard.word || item.word === currentOpen.word) {
-            item.status = nextStatus;
-            activeCards.push(item);
-          }
-        });
-        // If 2 we close opened two cards and open new one
-      } else {
-        activeCards = [];
-        state.cards.forEach((item) => {
-          item.status = item.status === CARD_STATUSES.opened ? CARD_STATUSES.closed : item.status;
-          if (item.word === targetCard.word) {
-            item.status = CARD_STATUSES.opened;
-            activeCards.push(item);
-          }
-        });
-      }
-      state.activeCards = activeCards;
+      GameLogic.openCard(state, action.payload);
     },
     cardClosed(state, action: PayloadAction<GameCard>) {
-      const targetCard = action.payload;
-      state.cards.forEach((item) => {
-        if (item.word === targetCard.word) {
-          item.status = CARD_STATUSES.closed;
-        }
-      });
-      state.activeCards = state.activeCards.filter((card) => card.word !== targetCard.word);
+      GameLogic.closeCard(state, action.payload);
     }
   }
 });
@@ -72,6 +38,7 @@ const gameSlice = createSlice({
 export function startGame(id: string) {
   return function startGameThunk(dispatch: AppDispatch) {
     subscribeToGame(id, (game: Game) => {
+      // If it's single game unsubscribe after first init.
       dispatch(getGame(game));
     });
   };

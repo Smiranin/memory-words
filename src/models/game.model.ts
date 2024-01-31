@@ -4,6 +4,7 @@ export interface Game extends GameSettings {
   players: GameUser[];
   cards: GameCard[];
   activeCards: GameCard[];
+  wordsLeft: number;
 }
 
 export interface GameSettings {

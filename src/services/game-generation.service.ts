@@ -17,16 +17,13 @@ export async function createGame(params: GameSettings & { user: AppUser }): Prom
     activeCards: [],
     lang,
     size,
-    type
+    type,
+    wordsLeft: cards.length / 2
   };
   return addNewGame(game).then((_) => game);
 }
 
-function generateCards({
-  words,
-  size,
-  lang
-}: Omit<GameSettings, 'type'> & { words: Word[] }): GameCard[] {
+function generateCards({ words, size, lang }: Omit<GameSettings, 'type'> & { words: Word[] }): GameCard[] {
   const [primaryLang, secondaryLang] = lang;
   const adjustedWords = adjustArrayBySize(words, size);
   const cards: GameCard[] = [];

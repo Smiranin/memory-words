@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
-import { createGame } from 'services/game.service';
+import { createGame } from 'services/game-generation.service';
 import { AppUser } from 'models/user.model';
 import { nanoid } from 'nanoid';
 
