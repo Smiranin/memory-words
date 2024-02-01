@@ -10,8 +10,6 @@ export default function CardsZone() {
 
   const colsClassName = getClassNameBySize(game.size);
 
-  const cssClasses = `${colsClassName} m-2 grid gap-4 grid-flow-col h-[600px] border-2 border-black	border-solid p-2`;
-
   function openCardHandle(card: GameCard): void {
     dispatch(openCard(card));
   }
@@ -21,10 +19,12 @@ export default function CardsZone() {
   }
 
   return (
-    <div className={cssClasses}>
-      {game.cards.map((card) => (
-        <Card key={card.word} card={card} onOpen={openCardHandle} onTimeoutCb={timeoutHandle} />
-      ))}
+    <div className="flex justify-center items-center h-full">
+      <div className={colsClassName + ' m-2 grid gap-4 h-full p-2'}>
+        {game.cards.map((card) => (
+          <Card key={card.word} card={card} onOpen={openCardHandle} onTimeoutCb={timeoutHandle} />
+        ))}
+      </div>
     </div>
   );
 }

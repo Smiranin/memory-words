@@ -3,13 +3,13 @@ import { GameSize } from 'models/game.model';
 export function getClassNameBySize(size: GameSize): string {
   switch (size) {
     case 'sm':
-      return 'grid-rows-[repeat(3,_1fr)]';
+      return 'grid-cols-3 aspect-[3/2]';
     case 'md':
       return 'grid-cols-4';
     case 'lg':
       return 'grid-cols-5';
     default:
-      return 'grid-rows-[repeat(3,_1fr)]';
+      return 'grid-rows-3 aspect-[3/2]';
   }
 }
 
