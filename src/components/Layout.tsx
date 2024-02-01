@@ -5,7 +5,7 @@ export default function Layout() {
   return (
     <div>
       <TopBar></TopBar>
-      <div className="h-svh overflow-hidden">
+      <div className="h-[calc(100vh-70px)] overflow-hidden">
         <Outlet />
       </div>
     </div>

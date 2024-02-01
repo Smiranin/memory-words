@@ -10,7 +10,7 @@ const routes: RouteObject[] = [
     path: '/',
     element: <Layout />,
     children: [
-      { index: true, path: '/dashboard', element: <Dashboard /> },
+      { index: true, element: <Dashboard /> },
       { path: '/games/:id', element: <GamePage /> },
       { path: '*', element: <NotFound /> }
     ]

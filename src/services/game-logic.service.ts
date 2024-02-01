@@ -36,11 +36,9 @@ export default class GameLogic {
 
   static closeCard(state: Game, targetCard: GameCard): Game {
     state.cards.forEach((item) => {
-      if (item.word === targetCard.word) {
-        item.status = CARD_STATUSES.closed;
-      }
+      item.status = item.status === CARD_STATUSES.opened ? CARD_STATUSES.closed : item.status;
     });
-    state.activeCards = state.activeCards.filter((card) => card.word !== targetCard.word);
+    state.activeCards = [];
     return state;
   }
 }
