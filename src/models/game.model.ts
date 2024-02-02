@@ -1,7 +1,7 @@
 export interface Game extends GameSettings {
   id: string;
   status: GameStatus;
-  players: GameUser[];
+  players: Player[];
   cards: GameCard[];
   activeCards: GameCard[];
   wordsLeft: number;
@@ -19,12 +19,13 @@ export interface GameCard {
   status: CardStatus;
 }
 
-export interface GameUser {
+export interface Player {
   userId: string;
   name: string;
   active: boolean;
   score: number;
   winner: boolean;
+  steps: number;
 }
 
 export type GameSize = 'sm' | 'md' | 'lg';

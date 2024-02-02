@@ -2,12 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { DatabaseReference, getDatabase, off, onValue, ref, update } from 'firebase/database';
 import { firebaseConfig } from './config';
 import { Word } from 'models/words.model';
-import { Game } from 'models/game.model';
+import { Game, GameUser } from 'models/game.model';
 
 initializeApp(firebaseConfig);
 const db = getDatabase();
 const wordsRef = ref(db, '/words');
 let activeGame: DatabaseReference | null = null;
+let activeUsers: DatabaseReference | null = null;
 
 export async function addNewGame(game: Game): Promise<void> {
   const updates: Record<string, Game> = {};
@@ -15,14 +16,12 @@ export async function addNewGame(game: Game): Promise<void> {
   return update(ref(db), updates);
 }
 
-export function subscribeToGame(
-  id: string,
-  cb: Function
-): { status: 'ok' | 'error'; msg?: string } {
+export function subscribeToGame(id: string, cb: Function): { status: 'ok' | 'error'; msg?: string } {
   if (activeGame) {
     unsubscribeFromActiveGame();
   }
   activeGame = ref(db, `games/${id}`);
+  activeUsers = ref(db, `games/${id}/users`);
   if (!activeGame) {
     return { status: 'error', msg: 'Game not found' };
   }
@@ -36,10 +35,18 @@ export function updateActiveGame(game: Game): void {
   }
 }
 
+export function updateActiveUsers(users: GameUser[]): void {
+  if (activeUsers) {
+    update(activeUsers, users);
+  }
+}
+
 export function unsubscribeFromActiveGame(): void {
-  if (activeGame) {
+  if (activeGame && activeUsers) {
     off(activeGame);
+    off(activeUsers);
     activeGame = null;
+    activeUsers = null;
   }
 }
 

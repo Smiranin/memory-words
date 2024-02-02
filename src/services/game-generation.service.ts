@@ -50,7 +50,8 @@ function createGameUser(user: AppUser): GameUser {
     name: user.fullName,
     active: false,
     score: 0,
-    winner: false
+    winner: false,
+    steps: 0
   };
 }
 

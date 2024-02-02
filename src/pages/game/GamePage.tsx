@@ -1,9 +1,10 @@
 import { useParams } from 'react-router-dom';
-import CardsZone from './CardsZone';
+import CardsZone from './game-zone/CardsZone';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useEffect } from 'react';
 import { unsubscribeFromActiveGame } from 'services/firebase/firebase-api.service';
 import { resetGame, startGame } from 'store/gameSlice';
+import GamePanel from './game-panel/GamePanel';
 
 export default function GamePage() {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ export default function GamePage() {
 
   return (
     <div className="container m-auto h-full p-2 ">
+      <GamePanel />
       <CardsZone />
     </div>
   );

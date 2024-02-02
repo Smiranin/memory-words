@@ -39,6 +39,8 @@ export default class GameLogic {
       item.status = item.status === CARD_STATUSES.opened ? CARD_STATUSES.closed : item.status;
     });
     state.activeCards = [];
+    // ToDo: Improve for multiplayers.
+    state.players[0].steps++;
     return state;
   }
 }
