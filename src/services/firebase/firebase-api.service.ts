@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { DatabaseReference, getDatabase, off, onValue, ref, update } from 'firebase/database';
 import { firebaseConfig } from './config';
 import { Word } from 'models/words.model';
-import { Game, GameUser } from 'models/game.model';
+import { Game, Player } from 'models/game.model';
 
 initializeApp(firebaseConfig);
 const db = getDatabase();
@@ -10,48 +10,50 @@ const wordsRef = ref(db, '/words');
 let activeGame: DatabaseReference | null = null;
 let activeUsers: DatabaseReference | null = null;
 
-export async function addNewGame(game: Game): Promise<void> {
-  const updates: Record<string, Game> = {};
-  updates[`/games/${game.id}`] = game;
-  return update(ref(db), updates);
-}
-
-export function subscribeToGame(id: string, cb: Function): { status: 'ok' | 'error'; msg?: string } {
-  if (activeGame) {
-    unsubscribeFromActiveGame();
+export default class GameDBService {
+  static async addNewGame(game: Game): Promise<void> {
+    const updates: Record<string, Game> = {};
+    updates[`/games/${game.id}`] = game;
+    return update(ref(db), updates);
   }
-  activeGame = ref(db, `games/${id}`);
-  activeUsers = ref(db, `games/${id}/users`);
-  if (!activeGame) {
-    return { status: 'error', msg: 'Game not found' };
-  }
-  onValue(activeGame, (snapshot) => cb(snapshot.val()));
-  return { status: 'ok' };
-}
 
-export function updateActiveGame(game: Game): void {
-  if (activeGame) {
-    update(activeGame, game);
+  static subscribeToGame(id: string, cb: Function): { status: 'ok' | 'error'; msg?: string } {
+    if (activeGame) {
+      GameDBService.unsubscribeFromActiveGame();
+    }
+    activeGame = ref(db, `games/${id}`);
+    activeUsers = ref(db, `games/${id}/users`);
+    if (!activeGame) {
+      return { status: 'error', msg: 'Game not found' };
+    }
+    onValue(activeGame, (snapshot) => cb(snapshot.val()));
+    return { status: 'ok' };
   }
-}
 
-export function updateActiveUsers(users: GameUser[]): void {
-  if (activeUsers) {
-    update(activeUsers, users);
+  static updateActiveGame(game: Game): void {
+    if (activeGame) {
+      update(activeGame, game);
+    }
   }
-}
 
-export function unsubscribeFromActiveGame(): void {
-  if (activeGame && activeUsers) {
-    off(activeGame);
-    off(activeUsers);
-    activeGame = null;
-    activeUsers = null;
+  static updateActiveUsers(users: Player[]): void {
+    if (activeUsers) {
+      update(activeUsers, users);
+    }
   }
-}
 
-export async function getWords(): Promise<Word[]> {
-  return new Promise((resolve) => {
-    onValue(wordsRef, (snapshot) => resolve(snapshot.val()), { onlyOnce: true });
-  });
+  static unsubscribeFromActiveGame(): void {
+    if (activeGame && activeUsers) {
+      off(activeGame);
+      off(activeUsers);
+      activeGame = null;
+      activeUsers = null;
+    }
+  }
+
+  static async getWords(): Promise<Word[]> {
+    return new Promise((resolve) => {
+      onValue(wordsRef, (snapshot) => resolve(snapshot.val()), { onlyOnce: true });
+    });
+  }
 }

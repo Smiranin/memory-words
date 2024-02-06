@@ -13,17 +13,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
-import { createGame } from 'services/game-generation.service';
+import GameDBService from 'services/game-generation.service';
 import { AppUser } from 'models/user.model';
-import { nanoid } from 'nanoid';
+import SettingsService from 'services/settings.service';
 
 const pages = ['Dashboard', 'New Game'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const fakeUser: AppUser = {
-  id: nanoid(),
-  firstName: 'Bugs',
-  lastName: 'Bunny',
-  fullName: 'Bugs Bunny'
+  username: 'Bugs Bunny'
 };
 
 export default function TopBar() {
@@ -53,11 +50,9 @@ export default function TopBar() {
 
   async function startGame() {
     try {
-      const newGame = await createGame({
+      const newGame = await GameDBService.createGame({
         user: fakeUser,
-        size: 'sm',
-        lang: ['en', 'ru'],
-        type: 'single'
+        ...SettingsService.getSettings()
       });
       navigate(`games/${newGame.id}`);
     } catch (error) {

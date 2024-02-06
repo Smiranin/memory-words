@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Game, GameCard } from 'models/game.model';
 import { AppDispatch, RootState } from './store';
-import { subscribeToGame, updateActiveGame } from 'services/firebase/firebase-api.service';
+import GameDBService from 'services/firebase/firebase-api.service';
 import GameLogic from 'services/game-logic.service';
 
 const initialState: Game = {
@@ -37,7 +37,7 @@ const gameSlice = createSlice({
 
 export function startGame(id: string) {
   return function startGameThunk(dispatch: AppDispatch) {
-    subscribeToGame(id, (game: Game) => {
+    GameDBService.subscribeToGame(id, (game: Game) => {
       // If it's single game unsubscribe after first init.
       dispatch(getGame(game));
     });
@@ -48,7 +48,7 @@ export function openCard(card: GameCard) {
   return function updateCardOnOpenThunk(dispatch: AppDispatch, test: any) {
     dispatch(cardOpened(card));
     let state = test() as RootState;
-    updateActiveGame(state.game);
+    GameDBService.updateActiveGame(state.game);
   };
 }
 
@@ -56,7 +56,7 @@ export function closeCard(card: GameCard) {
   return function updateCardOnCloseThunk(dispatch: AppDispatch, test: any) {
     dispatch(cardClosed(card));
     let state = test() as RootState;
-    updateActiveGame(state.game);
+    GameDBService.updateActiveGame(state.game);
   };
 }
 
