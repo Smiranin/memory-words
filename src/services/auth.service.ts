@@ -3,20 +3,25 @@
 
 import { AppUser } from 'models/user.model';
 
-export default class LoginService {
+const AUTH_KEY = 'mw-auth';
+
+export default class AuthService {
+  static init(): AppUser | null {
+    const existed = localStorage.getItem(AUTH_KEY);
+    return existed ? JSON.parse(existed) : null;
+  }
+
   static login(user: AppUser): void {
-    localStorage.setItem(user.username, JSON.stringify(user));
+    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
   }
 
-  static update(user: AppUser): void {
-    if (localStorage.getItem(user.username)) {
-      localStorage.setItem(user.username, JSON.stringify(user));
-    }
+  static update(user: Partial<AppUser>): void {
+    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
   }
 
-  static logout(user: AppUser): void {
-    if (localStorage.getItem(user.username)) {
-      localStorage.removeItem(user.username);
+  static logout(): void {
+    if (localStorage.getItem(AUTH_KEY)) {
+      localStorage.removeItem(AUTH_KEY);
     }
   }
 }

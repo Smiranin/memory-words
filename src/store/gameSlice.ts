@@ -45,17 +45,17 @@ export function startGame(id: string) {
 }
 
 export function openCard(card: GameCard) {
-  return function updateCardOnOpenThunk(dispatch: AppDispatch, test: any) {
+  return function updateCardOnOpenThunk(dispatch: AppDispatch, storeAPI: any) {
     dispatch(cardOpened(card));
-    let state = test() as RootState;
+    let state = storeAPI() as RootState;
     GameDBService.updateActiveGame(state.game);
   };
 }
 
 export function closeCard(card: GameCard) {
-  return function updateCardOnCloseThunk(dispatch: AppDispatch, test: any) {
+  return function updateCardOnCloseThunk(dispatch: AppDispatch, storeAPI: any) {
     dispatch(cardClosed(card));
-    let state = test() as RootState;
+    let state = storeAPI() as RootState;
     GameDBService.updateActiveGame(state.game);
   };
 }
