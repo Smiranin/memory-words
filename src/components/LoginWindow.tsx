@@ -24,6 +24,8 @@ export default function LoginWindow() {
     <>
       <Dialog
         open={open}
+        fullWidth={true}
+        maxWidth="md"
         PaperProps={{
           component: 'form',
           onSubmit: handleSubmit
@@ -31,9 +33,7 @@ export default function LoginWindow() {
       >
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates occasionally.
-          </DialogContentText>
+          <DialogContentText>Type Your Username</DialogContentText>
           <TextField
             id="outlined-basic"
             margin="dense"
@@ -41,6 +41,7 @@ export default function LoginWindow() {
             label="Username"
             variant="outlined"
             autoFocus
+            fullWidth
             required
           />
         </DialogContent>
