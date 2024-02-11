@@ -13,6 +13,11 @@ const userAuthSlice = createSlice({
   initialState,
   reducers: {
     updateUser(state, action: PayloadAction<AppUser | null>) {
+      console.log(
+        '%c Debug:',
+        'background: #0E1926; color: #8EFF1E; padding: 8px 12px; font-size: 14px;',
+        action.payload
+      );
       if (action.payload) {
         state.status = 'in';
         state.user = action.payload;
@@ -20,8 +25,14 @@ const userAuthSlice = createSlice({
         state.status = 'out';
       }
     },
-    userLoggedIn(state, action: PayloadAction<AppUser | null>) {},
-    userLoggedOut(state) {}
+    userLoggedIn(state, action: PayloadAction<AppUser | null>) {
+      state.user = action.payload;
+      state.status = 'in';
+    },
+    userLoggedOut(state) {
+      state.user = null;
+      state.status = 'out';
+    }
   }
 });
 

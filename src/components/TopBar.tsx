@@ -19,11 +19,8 @@ import SettingsService from 'services/settings.service';
 
 const pages = ['Dashboard', 'New Game'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const fakeUser: AppUser = {
-  username: 'Bugs Bunny'
-};
 
-export default function TopBar() {
+export default function TopBar({ user }: { user: AppUser | null }) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
@@ -49,9 +46,10 @@ export default function TopBar() {
   };
 
   async function startGame() {
+    if (!user) return;
     try {
       const newGame = await GameDBService.createGame({
-        user: fakeUser,
+        user,
         ...SettingsService.getSettings()
       });
       navigate(`games/${newGame.id}`);
@@ -147,7 +145,7 @@ export default function TopBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={user?.username} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

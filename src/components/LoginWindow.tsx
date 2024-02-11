@@ -7,8 +7,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import { login } from 'store/authSlice';
+import { useAppDispatch } from 'store/hooks';
 
 export default function LoginWindow() {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
 
   function handleSubmit(e: HTMLFormElement): void {
@@ -16,7 +18,7 @@ export default function LoginWindow() {
     const formData = new FormData(e.currentTarget);
     const formJson = Object.fromEntries((formData as any).entries());
     const username = formJson.username;
-    login({ username });
+    dispatch(login({ username }));
     setOpen(false);
   }
 
