@@ -20,6 +20,8 @@ export default class GameLogic {
         });
         state.wordsLeft--;
       }
+      // ToDo: Improve for multiplayers.
+      state.players[0].steps++;
       // If 2 we close opened two cards and open new one
     } else {
       state.activeCards = [];
@@ -39,8 +41,6 @@ export default class GameLogic {
       item.status = item.status === CARD_STATUSES.opened ? CARD_STATUSES.closed : item.status;
     });
     state.activeCards = [];
-    // ToDo: Improve for multiplayers.
-    state.players[0].steps++;
     return state;
   }
 }
