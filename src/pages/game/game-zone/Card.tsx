@@ -2,6 +2,7 @@ import { GameCard, CARD_STATUSES } from 'models/game.model';
 import styles from './card.module.css';
 import { joinClasses } from 'utils/styles-healper';
 import { useEffect, useState } from 'react';
+import FlexText from 'components/FlexText';
 
 const CARD_TIMEOUT = 2000;
 
@@ -39,7 +40,9 @@ export default function Card(props: {
   return (
     <div onClick={handleClick} className={cssClasses}>
       <div className={styles.content}>
-        <div className={styles.front}>{card.word}</div>
+        <div className={styles.front}>
+          <FlexText text={card.word} />
+        </div>
         <div className={styles.back}></div>
       </div>
     </div>

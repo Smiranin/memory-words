@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react';
 
-export default function FlexText() {
+export default function FlexText({ text }: { text: string }) {
   const innerEl = useRef<HTMLDivElement>(null);
   const contEl = useRef<HTMLDivElement>(null);
-
-  const text = 'elementselementselements';
 
   useEffect(() => {
     const handleResize = () => {
@@ -12,8 +10,15 @@ export default function FlexText() {
         innerEl.current.style.display = 'inline-block';
         let innerW = innerEl.current.offsetWidth;
         let parentW = contEl.current.offsetWidth;
-        const scaleX = parentW / (innerW + 20);
-        // debugger;
+        console.log(
+          '%c Debug:',
+          'background: #0E1926; color: #8EFF1E; padding: 8px 12px; font-size: 14px;',
+          innerW,
+          parentW
+        );
+
+        const containrPadding = 8;
+        const scaleX = parentW / (innerW + containrPadding);
 
         innerEl.current.style.transform = `scale(${scaleX})`;
         innerEl.current.style.transformOrigin = `top left`;
